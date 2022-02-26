@@ -13,15 +13,15 @@ public class ConsoleInput {
     }
 
     private static boolean validUserInput(String chosenCoordinates) {
-        boolean isCharValid = chosenCoordinates.matches("^[A-H].*$");
 
-        char[] pawnCoordinates = chosenCoordinates.toCharArray();
+        if (chosenCoordinates.length() == 2) {
+            boolean isCharValid = chosenCoordinates.matches("^[A-H].*$");
+            char[] pawnCoordinates = chosenCoordinates.toCharArray();
+            boolean isDigitValid = ValueRange.of(49, 57).isValidIntValue((int) pawnCoordinates[1]);
 
-        boolean isDigitValid = ValueRange.of(49, 57).isValidIntValue((int) pawnCoordinates[1]);
-
-        if (chosenCoordinates.length() == 2 && isCharValid && isDigitValid) {
-
-            return true;
+            if(isCharValid && isDigitValid){
+                return true;
+            }
 
         }
         System.out.println("Wrong pawn coordinates, try again...");
