@@ -7,7 +7,7 @@ public class ConsoleView {
 
     public static void printBoard(Board board) {
         printBoardSigns();
-
+        printLine();
         for (int i = 0; i < 8; i++) {
             System.out.print((i + 1) + " | ");
 
@@ -18,6 +18,7 @@ public class ConsoleView {
             System.out.print("| "+(i + 1));
             System.out.println();
         }
+        printLine();
         printBoardSigns();
     }
 
@@ -34,12 +35,12 @@ public class ConsoleView {
     }
 
 //
-//    private static void printLine() {
-//        System.out.print("   ");
-//        for (int i = 0; i < 8; i++) {
-//            System.out.print("_" + " ");
-//        }
-//        System.out.println();
-//    }
+    private static void printLine() {
+        System.out.print("    ");
+        for (int i = 0; i < 8; i++) {
+            System.out.print("-" + " ");
+        }
+        System.out.println();
+    }
 }
 
