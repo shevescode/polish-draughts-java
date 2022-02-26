@@ -5,6 +5,7 @@ public class Pawn {
     private boolean killed = false;
     private boolean white = false;
     private String look;
+    private Coordinates coordinates;
 
     @Override
     public String toString() {
@@ -15,9 +16,10 @@ public class Pawn {
                 '}';
     }
 
-    public Pawn(boolean white) {
+    public Pawn(int x, int y, boolean white) {
         this.setWhite(white);
         this.setLook(white);
+        coordinates = new Coordinates(x, y);
     }
 
     public void setLook(boolean white) {

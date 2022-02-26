@@ -48,7 +48,7 @@ public class Board {
             if (j % 2 == oodOrEven) {
                 boxes[i][j] = new Spot(i, j, null);
             } else {
-                boxes[i][j] = new Spot(i, j, new Pawn(white));
+                boxes[i][j] = new Spot(i, j, new Pawn(i, j, white));
             }
         }
     }
