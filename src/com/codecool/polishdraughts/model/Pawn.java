@@ -22,13 +22,14 @@ public class Pawn {
 
     public void setLook(boolean white) {
         if(white) {
-            look = "X ";
+            look = "W ";
         } else {
-            look = "O ";
+            look = "B ";
         }
     }
 
     public String getLook() {
+
         return look;
     }
 
@@ -38,18 +39,15 @@ public class Pawn {
     }
 
     public void setWhite(boolean white)
-    {
-        this.white = white;
+    {this.white = white;
     }
 
     public boolean isKilled()
-    {
-        return this.killed;
+    {return this.killed;
     }
 
     public void setKilled(boolean killed)
-    {
-        this.killed = killed;
+    {this.killed = killed;
     }
 
 

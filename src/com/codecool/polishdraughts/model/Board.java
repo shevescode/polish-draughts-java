@@ -8,9 +8,7 @@ public class Board {
 
     @Override
     public String toString() {
-        return "Board{" +
-                "boxes=" + Arrays.toString(boxes) +
-                '}';
+        return "Board{" + "boxes=" + Arrays.toString(boxes) + '}';
     }
 
     public Board() {
@@ -19,6 +17,7 @@ public class Board {
     }
 
     public Spot[][] getBoxes() {
+
         return boxes;
     }
 //    0, 2, 6 -> zaczynasz od null na zmiane
@@ -29,17 +28,13 @@ public class Board {
         for (int i = 0; i <= 7; i++) {
             if (i == 0 || i == 2) {
                 createBoxes(i, true, 0);
-            }
-            else if (i == 6) {
+            } else if (i == 6) {
                 createBoxes(i, false, 0);
-            }
-            else if(i == 5 || i == 7) {
+            } else if (i == 5 || i == 7) {
                 createBoxes(i, false, 1);
-            }
-            else if(i == 1) {
+            } else if (i == 1) {
                 createBoxes(i, true, 1);
-            }
-            else {
+            } else {
                 for (int j = 0; j < 8; j++) {
                     boxes[i][j] = new Spot(i, j, null);
                 }
@@ -57,6 +52,8 @@ public class Board {
             }
         }
     }
+
+}
 
 
 /*
@@ -133,5 +130,3 @@ public class Board {
 
     }
 */
-
-}
