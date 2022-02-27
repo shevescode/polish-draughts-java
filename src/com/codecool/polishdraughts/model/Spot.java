@@ -1,13 +1,15 @@
 package com.codecool.polishdraughts.model;
 
 public class Spot {
+    private boolean isActive;
+    private boolean isPossible;
     private Pawn pawn;
     private final Coordinates coordinates;
 
-    public Spot(int x, int y, Pawn pawn) {
+    public Spot(int x, int y, Pawn pawn, boolean isActive) {
         this.setPawn(pawn);
-
         coordinates = new Coordinates(x, y);
+        this.isActive = isActive;
     }
 
     public Coordinates getCoordinates() {
@@ -24,7 +26,15 @@ public class Spot {
         this.pawn = pawn;
     }
 
-//    public int getX(int x) {
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public void setPossible(boolean possible) {
+        isPossible = possible;
+    }
+
+    //    public int getX(int x) {
 //
 //        return this.x;
 //    }
@@ -46,8 +56,12 @@ public class Spot {
 
     @Override
     public String toString() {
-        if (pawn == null) {
+        if (!isActive) {
+            return "  ";
+        } else if (pawn == null && !isPossible) {
             return "- ";
+        } else if (pawn == null) {
+            return "+ ";
         } else {
             return pawn.getLook();
         }

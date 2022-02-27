@@ -1,13 +1,31 @@
 package com.codecool.polishdraughts.view;
 
 import com.codecool.polishdraughts.model.Board;
+import com.codecool.polishdraughts.model.Spot;
+
+import java.awt.*;
+import java.util.List;
 
 import static java.lang.Math.abs;
 
 public class ConsoleView {
 
+    public ConsoleView() {
 
-    public static void printBoard(Board board) {
+    }
+
+
+
+
+
+    public void printMenu() {
+        System.out.println("1. Start Game");
+        System.out.println("2. Options");
+        System.out.println("3. Credits");
+        System.out.println("4. Exit");
+    }
+
+    public void printBoard(Board board) {
         printBoardSigns();
         printLine();
         for (int i = 8; i > 0; i--) {

@@ -27,16 +27,22 @@ public class Board {
     public void createBoard() {
         for (int i = 0; i <= 7; i++) {
             if (i == 0 || i == 2) {
-                createBoxes(i, true, 0);
-            } else if (i == 6) {
                 createBoxes(i, false, 0);
+            } else if (i == 6) {
+                createBoxes(i, true, 0);
             } else if (i == 5 || i == 7) {
-                createBoxes(i, false, 1);
-            } else if (i == 1) {
                 createBoxes(i, true, 1);
+            } else if (i == 1) {
+                createBoxes(i, false, 1);
             } else {
                 for (int j = 0; j < 8; j++) {
-                    boxes[i][j] = new Spot(i, j, null);
+                    if ((i%2==1 && j%2 == 0) || (i%2==0 && j%2 == 1)) {
+                        boxes[i][j] = new Spot(i, j, null, true);
+                    }
+                    else {
+                        boxes[i][j] = new Spot(i, j, null, false);
+                    }
+
                 }
             }
         }
@@ -46,9 +52,9 @@ public class Board {
     private void createBoxes(int i, boolean white, int oodOrEven) {
         for (int j = 0; j < 8; j++) {
             if (j % 2 == oodOrEven) {
-                boxes[i][j] = new Spot(i, j, null);
+                boxes[i][j] = new Spot(i, j, null, false);
             } else {
-                boxes[i][j] = new Spot(i, j, new Pawn(i, j, white));
+                boxes[i][j] = new Spot(i, j, new Pawn(i, j, white), true);
             }
         }
     }

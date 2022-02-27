@@ -8,10 +8,11 @@ import com.codecool.polishdraughts.model.Game;
 public class Main {
 
     public static void main(String[] args) {
-        Board board = new Board();
 
-        ConsoleView.printBoard(board);
-        Game.makeMove(board);
-        ConsoleView.printBoard(board);
+
+        Game game = new Game();
+
+
+
     }
 }

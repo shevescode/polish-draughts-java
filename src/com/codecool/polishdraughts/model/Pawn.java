@@ -3,7 +3,7 @@ package com.codecool.polishdraughts.model;
 public class Pawn {
 
     private boolean killed = false;
-    private boolean white = false;
+    private boolean white;
     private String look;
     private Coordinates coordinates;
 
