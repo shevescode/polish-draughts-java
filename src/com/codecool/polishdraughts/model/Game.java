@@ -11,21 +11,22 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 public class Game {
-    private Pawn pawn;
+    public static final int WHITE = 1;
+    public static final int BLACK = 2;
+
     private boolean gameIsRunning;
     private Board board;
-    private Spot[][] boxes;
-    private final ConsoleView consoleView = new ConsoleView();
+    private final ConsoleView consoleView;
     private int player;
     private boolean isToKill;
 
     public Game() {
-        menu();
+        consoleView = new ConsoleView();
     }
 
-    private void menu() {
+    public void beginGame() {
         consoleView.printMenu();
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in); //TODO move to console input
 
         switch (scanner.nextInt()) {
             case 1 -> start();
@@ -35,7 +36,7 @@ public class Game {
                 System.out.println("Exit");
                 exit(0);
             }
-            default -> menu();
+            default -> beginGame();
         }
     }
 
@@ -55,12 +56,12 @@ public class Game {
     public void start() {
         gameIsRunning = true;
         this.board = new Board();
-        setBoxes(board);
+        board.createBoard();
         player = 1;
         while (gameIsRunning) {
-            System.out.println("PLAYER: "+ player);
+            System.out.println("PLAYER: " + player);
             makeMove(player);
-            if(!isToKill) {
+            if (!isToKill) {
                 player = player == 1 ? 2 : 1;
             }
         }
@@ -69,35 +70,34 @@ public class Game {
 
     public void makeMove(int player) {
         consoleView.printBoard(board);
-        int[] selectedPawn = ConsoleInput.getMove();
-        List<Point> points = getPossibleMoves(player, selectedPawn[0], selectedPawn[1]);
-        setPossibleMoves(points, boxes);
+        Coordinates selectedPawn = ConsoleInput.getMove();
+        List<Point> points = getPossibleMoves(player, selectedPawn);
+        setPossibleMoves(points, board.getBoxes());
         consoleView.printBoard(board);
 
-        int[] selectedSpot = ConsoleInput.getMove();
+        Coordinates selectedSpot = ConsoleInput.getMove();
         if (isToKill) {
-            findPawnCoordinatesToRemove(selectedPawn, selectedSpot, boxes);
+            findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
         }
 
-        removePossibleMoves(points, boxes);
-        Pawn pawn = boxes[selectedPawn[0]][selectedPawn[1]].getPawn();
-        boxes[selectedPawn[0]][selectedPawn[1]].setPawn(null);
-        boxes[selectedSpot[0]][selectedSpot[1]].setPawn(pawn);
+        removePossibleMoves(points, board.getBoxes());
+        board.movePawn(selectedPawn, selectedSpot);
+
 
         consoleView.printBoard(board);
 
 
     }
 
-    public List<Point> getPossibleMoves(int player, int selectedX, int selectedY) {
+    public List<Point> getPossibleMoves(int player, Coordinates coordinates) {
         List<Point> points = new ArrayList<>();
+        int selectedX = coordinates.getX();
+        int selectedY = coordinates.getY();
         isToKill = false;
         switch (player) {
-            case 1 -> {
+            case WHITE -> {
                 if (!checkIfEmpty(selectedX - 1, selectedY - 1)) {
-                    System.out.println("IF 1 WaruneK1-case-1");
                     if (!isWhite(selectedX - 1, selectedY - 1)) {
-                        System.out.println("IF 1 WaruneK2-case-1-przeszło isWhite");
                         if (checkIfEmpty(selectedX - 2, selectedY - 2)) {
                             isToKill = true;
                             points.add(new Point(selectedX - 2, selectedY - 2));
@@ -143,22 +143,17 @@ public class Game {
 
             }
 
-            case 2 -> {
+            case BLACK -> {
                 if (!checkIfEmpty(selectedX + 1, selectedY + 1)) {
-                    System.out.println("IF 1 Warunek 1 case 2");
                     if (isWhite(selectedX + 1, selectedY + 1)) {
-                        System.out.println("IF 1Warunek 1-case-2-przeszło isWhite");
                         if (checkIfEmpty(selectedX + 2, selectedY + 2)) {
-                            System.out.println("IF 1 Warunek 1-case-2-przeszło isWhite i checkIfEmpty");
                             isToKill = true;
                             points.add(new Point(selectedX + 2, selectedY + 2));
                         }
                     }
                 }
                 if (!checkIfEmpty(selectedX + 1, selectedY - 1)) {
-                    System.out.println("IF 2 Warunek 1 case 2");
                     if (isWhite(selectedX + 1, selectedY - 1)) {
-                        System.out.println("IF 2 WaruneK1-case-2-przeszło isWhite");
                         if (checkIfEmpty(selectedX + 2, selectedY - 2)) {
                             isToKill = true;
                             points.add(new Point(selectedX + 2, selectedY - 2));
@@ -166,9 +161,7 @@ public class Game {
                     }
                 }
                 if (!checkIfEmpty(selectedX - 1, selectedY - 1)) {
-                    System.out.println("IF 3 Warunek 1 case 2");
                     if (isWhite(selectedX - 1, selectedY - 1)) {
-                        System.out.println("IF 3 WaruneK1-case-2-przeszło isWhite");
                         if (checkIfEmpty(selectedX - 2, selectedY - 2)) {
                             isToKill = true;
                             points.add(new Point(selectedX - 2, selectedY - 2));
@@ -176,9 +169,7 @@ public class Game {
                     }
                 }
                 if (!checkIfEmpty(selectedX - 1, selectedY + 1)) {
-                    System.out.println("IF 4 Warunek 1 case 2");
                     if (isWhite(selectedX - 1, selectedY + 1)) {
-                        System.out.println("IF 4 WaruneK1-case-2-przeszło isWhite");
                         if (checkIfEmpty(selectedX - 2, selectedY + 2)) {
                             isToKill = true;
                             points.add(new Point(selectedX - 2, selectedY + 2));
@@ -208,7 +199,7 @@ public class Game {
 
     private boolean checkIfEmpty(int x, int y) {
         try {
-            return boxes[x][y].getPawn() == null;
+            return board.getBoxes()[x][y].getPawn() == null;
         } catch (Exception e) {
             return false;
         }
@@ -216,13 +207,12 @@ public class Game {
 
     private boolean isWhite(int x, int y) {
         try {
-            if (boxes[x][y].getPawn().isWhite()) {
+            if (board.getBoxes()[x][y].getPawn().isWhite()) {
                 return true;
             } else {
                 return false;
 
             }
-
 
         } catch (
                 Exception e) {
@@ -231,12 +221,12 @@ public class Game {
 
     }
 
-    private void findPawnCoordinatesToRemove(int[] selectedPawn, int[] selectedSpot, Spot[][] boxes) {
-        int x = (selectedPawn[0] + selectedSpot[0]) / 2;
-        int y = (selectedPawn[1] + selectedSpot[1]) / 2;
+    private void findPawnCoordinatesToRemove(Coordinates selectedPawn, Coordinates selectedSpot) {
+        int x = (selectedPawn.getX() + selectedSpot.getX()) / 2;
+        int y = (selectedPawn.getY() + selectedSpot.getY()) / 2;
 
-        boxes[x][y].getPawn().setKilled(true);
-        boxes[x][y].setPawn(null);
+        board.getBoxes()[x][y].getPawn().setKilled(true);
+        board.getBoxes()[x][y].setPawn(null);
 
     }
 
@@ -254,8 +244,4 @@ public class Game {
         }
     }
 
-    public void setBoxes(Board board) {
-        this.board = board;
-        this.boxes = board.getBoxes();
-    }
 }

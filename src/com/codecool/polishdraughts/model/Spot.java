@@ -1,64 +1,58 @@
 package com.codecool.polishdraughts.model;
 
 public class Spot {
-    private boolean isActive;
-    private boolean isPossible;
+    private boolean active;
+    private boolean possible;
     private Pawn pawn;
     private final Coordinates coordinates;
 
-    public Spot(int x, int y, Pawn pawn, boolean isActive) {
-        this.setPawn(pawn);
-        coordinates = new Coordinates(x, y);
-        this.isActive = isActive;
+    public Spot(int x, int y, boolean active) {
+        this.coordinates = new Coordinates(x, y);
+        this.setPawn(null);
+        this.active = active;
     }
+
+    public Spot(int x, int y, Pawn pawn, boolean active) {
+        this.coordinates = new Coordinates(x, y);
+        this.setPawn(pawn);
+        this.active = active;
+    }
+
+
 
     public Coordinates getCoordinates() {
         return coordinates;
     }
 
     public Pawn getPawn() {
-
         return this.pawn;
     }
 
     public void setPawn(Pawn pawn) {
-
         this.pawn = pawn;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public void setPossible(boolean possible) {
-        isPossible = possible;
+        this.possible = possible;
     }
 
-    //    public int getX(int x) {
-//
-//        return this.x;
-//    }
-//
-//    public void setX(int x) {
-//
-//        this.x = x;
-//    }
-//
-//    public int getY(int y) {
-//
-//        return this.y;
-//    }
-//
-//    public void setY(int y) {
-//
-//        this.y = y;
-//    }
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isPossible() {
+        return possible;
+    }
 
     @Override
     public String toString() {
-        if (!isActive) {
+        if (!active) {
             return "  ";
-        } else if (pawn == null && !isPossible) {
+        } else if (pawn == null && !possible) {
             return "- ";
         } else if (pawn == null) {
             return "+ ";
@@ -66,12 +60,4 @@ public class Spot {
             return pawn.getLook();
         }
     }
-
-//    public boolean isEmpty() {
-//        if (pawn == null) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 }
