@@ -20,6 +20,7 @@ public class ConsoleInput {
             return new int[]{abs(row-8), col};
 
         }
+
         return new int[0];
     }
 
