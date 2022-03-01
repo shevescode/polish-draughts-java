@@ -13,20 +13,22 @@ public class Game {
     private boolean gameIsRunning;
     private Board board;
     private final ConsoleView consoleView;
+    private final ConsoleInput consoleInput;
     private final Util util;
     private int player;
 
 
     public Game() {
         consoleView = new ConsoleView();
+        consoleInput = new ConsoleInput();
         util = new Util();
     }
 
     public void beginGame() {
         consoleView.printMenu();
-        Scanner scanner = new Scanner(System.in); //TODO move to console input
+//        Scanner scanner = new Scanner(System.in); //TODO move to console input
 
-        switch (scanner.nextInt()) {
+        switch (consoleInput.getScanner().nextInt()) {
             case 1 -> start();
             case 2 -> System.out.println("Options");
             case 3 -> System.out.println("Credits");
@@ -38,18 +40,6 @@ public class Game {
         }
     }
 
-
-    public void promptEnterKey() {
-        System.out.println("Hit \"ENTER\" to Start");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-        clearScreen();
-    }
-
-    public void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
 
     public void start() {
         gameIsRunning = true;
@@ -69,7 +59,13 @@ public class Game {
 
     public void playRound(int player) {
         consoleView.printBoard(board);
-        Coordinates selectedPawn = ConsoleInput.getMove();
+        util.setToKill(false);
+        Coordinates selectedPawn= util.checkIfHitPossible(player);
+        if(!util.isToKill()){
+            selectedPawn = ConsoleInput.getMove();
+        }
+
+
         List<Point> points = util.getPossibleMoves(player, selectedPawn);
         util.setPossibleMoves(points, board.getBoxes());
         consoleView.printBoard(board);

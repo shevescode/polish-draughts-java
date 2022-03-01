@@ -7,6 +7,16 @@ import java.util.Scanner;
 import static java.lang.Math.abs;
 
 public class ConsoleInput {
+    private Scanner scanner;
+
+    public ConsoleInput(){
+        this.scanner = new Scanner(System.in);
+    }
+
+
+    public Scanner getScanner() {
+        return scanner;
+    }
 
     public static Coordinates getMove() {
         Scanner scanner = new Scanner(System.in);

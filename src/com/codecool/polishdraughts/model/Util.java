@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 public class Util {
     public static final int WHITE = 1;
     public static final int BLACK = 2;
@@ -11,8 +13,13 @@ public class Util {
     private boolean isToKill;
     private Board board;
 
+
     public boolean isToKill() {
         return isToKill;
+    }
+
+    public void setToKill(boolean toKill) {
+        isToKill = toKill;
     }
 
     public void setBoard(Board board) {
@@ -126,6 +133,7 @@ public class Util {
 
         return points;
     }
+
     private boolean checkIfEmpty(int x, int y) {
         try {
             return board.getBoxes()[x][y].getPawn() == null;
@@ -150,6 +158,7 @@ public class Util {
 
     }
 
+
     public void findPawnCoordinatesToRemove(Coordinates selectedPawn, Coordinates selectedSpot) {
         int x = (selectedPawn.getX() + selectedSpot.getX()) / 2;
         int y = (selectedPawn.getY() + selectedSpot.getY()) / 2;
@@ -173,4 +182,94 @@ public class Util {
         }
     }
 
+    public Coordinates checkIfHitPossible(int player) {
+        for (int i = 0; i < board.getBoxes().length ; i++) {
+            for (int j = 0; j < board.getBoxes()[i].length; j++) {
+                if (player == 1) {
+                    try {
+                        if (board.getBoxes()[i][j].getPawn().getLook().equals("W ")){
+                            if (!checkIfEmpty(i - 1, j - 1)) {
+                                if (!isWhite(i - 1, j - 1)) {
+                                    if (checkIfEmpty(i - 2, j - 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i - 1, j + 1)) {
+                                if (!isWhite(i - 1, j + 1)) {
+                                    if (checkIfEmpty(i - 2, j + 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i + 1, j + 1)) {
+                                if (!isWhite(i + 1, j + 1)) {
+                                    if (checkIfEmpty(i + 2, j + 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i + 1, j - 1)) {
+                                if (!isWhite(i + 1, j - 1)) {
+                                    if (checkIfEmpty(i + 2, j - 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        continue;
+                    }
+
+                }
+                if (player == 2) {
+                    try {
+                        if (board.getBoxes()[i][j].getPawn().getLook().equals("B ")) {
+                            if (!checkIfEmpty(i + 1, j + 1)) {
+                                if (isWhite(i + 1, j + 1)) {
+                                    if (checkIfEmpty(i + 2, j + 2)) {
+                                        isToKill = true;
+
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i + 1, j - 1)) {
+                                if (isWhite(i + 1, j - 1)) {
+                                    if (checkIfEmpty(i + 2, j - 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i - 1, j - 1)) {
+                                if (isWhite(i - 1, j - 1)) {
+                                    if (checkIfEmpty(i - 2, j - 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                            if (!checkIfEmpty(i - 1, j + 1)) {
+                                if (isWhite(i - 1, j + 1)) {
+                                    if (checkIfEmpty(i - 2, j + 2)) {
+                                        isToKill = true;
+                                        return new Coordinates(i,j);
+                                    }
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        continue;
+                    }
+
+                }
+            }
+    }
+    return new Coordinates(-1,-1);
+    }
 }
