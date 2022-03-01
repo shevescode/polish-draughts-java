@@ -1,10 +1,7 @@
 package com.codecool.polishdraughts.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 public class Util {
     public static final int WHITE = 1;
@@ -30,114 +27,6 @@ public class Util {
         this.board = board;
     }
 
-//    public ArrayList<Coordinates> getPossibleMoves(int player, ArrayList<Coordinates> coordinates) {
-//        List<Point> points = new ArrayList<>();
-//        int selectedX = coordinates.getX();
-//        int selectedY = coordinates.getY();
-//        isToKill = false;
-//        switch (player) {
-//            case WHITE -> {
-//                if (!checkIfEmpty(selectedX - 1, selectedY - 1)) {
-//                    if (!isWhite(selectedX - 1, selectedY - 1)) {
-//                        if (checkIfEmpty(selectedX - 2, selectedY - 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX - 2, selectedY - 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX - 1, selectedY + 1)) {
-//                    if (!isWhite(selectedX - 1, selectedY + 1)) {
-//                        if (checkIfEmpty(selectedX - 2, selectedY + 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX - 2, selectedY + 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX + 1, selectedY + 1)) {
-//                    if (!isWhite(selectedX + 1, selectedY + 1)) {
-//                        if (checkIfEmpty(selectedX + 2, selectedY + 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX + 2, selectedY + 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX + 1, selectedY - 1)) {
-//                    if (!isWhite(selectedX + 1, selectedY - 1)) {
-//                        if (checkIfEmpty(selectedX + 2, selectedY - 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX + 2, selectedY - 2));
-//                        }
-//                    }
-//                }
-//
-//                if (!isToKill) {
-//                    if (checkIfEmpty(selectedX - 1, selectedY - 1)) {
-//                        points.add(new Point(selectedX - 1, selectedY - 1));
-//                    }
-//
-//                    if (checkIfEmpty(selectedX - 1, selectedY + 1)) {
-//                        points.add(new Point(selectedX - 1, selectedY + 1));
-//                    }
-//
-//                }
-//
-//
-//            }
-//
-//            case BLACK -> {
-//                if (!checkIfEmpty(selectedX + 1, selectedY + 1)) {
-//                    if (isWhite(selectedX + 1, selectedY + 1)) {
-//                        if (checkIfEmpty(selectedX + 2, selectedY + 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX + 2, selectedY + 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX + 1, selectedY - 1)) {
-//                    if (isWhite(selectedX + 1, selectedY - 1)) {
-//                        if (checkIfEmpty(selectedX + 2, selectedY - 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX + 2, selectedY - 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX - 1, selectedY - 1)) {
-//                    if (isWhite(selectedX - 1, selectedY - 1)) {
-//                        if (checkIfEmpty(selectedX - 2, selectedY - 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX - 2, selectedY - 2));
-//                        }
-//                    }
-//                }
-//                if (!checkIfEmpty(selectedX - 1, selectedY + 1)) {
-//                    if (isWhite(selectedX - 1, selectedY + 1)) {
-//                        if (checkIfEmpty(selectedX - 2, selectedY + 2)) {
-//                            isToKill = true;
-//                            points.add(new Point(selectedX - 2, selectedY + 2));
-//                        }
-//                    }
-//                }
-//
-//                if (!isToKill) {
-//                    if (checkIfEmpty(selectedX + 1, selectedY + 1)) {
-//                        points.add(new Point(selectedX + 1, selectedY + 1));
-//                    }
-//
-//
-//                    if (checkIfEmpty(selectedX + 1, selectedY - 1)) {
-//                        points.add(new Point(selectedX + 1, selectedY - 1));
-//                    }
-//
-//                }
-//
-//
-//            }
-//        }
-//
-//
-//        return points;
-//    }
-
     private boolean checkIfEmpty(int x, int y) {
         try {
             return board.getBoxes()[x][y].getPawn() == null;
@@ -148,12 +37,7 @@ public class Util {
 
     private boolean isWhite(int x, int y) {
         try {
-            if (board.getBoxes()[x][y].getPawn().isWhite()) {
-                return true;
-            } else {
-                return false;
-
-            }
+            return board.getBoxes()[x][y].getPawn().isWhite();
 
         } catch (
                 Exception e) {
@@ -176,7 +60,7 @@ public class Util {
     public void setPossibleMoves(List<Coordinates> possibleMoves, Spot[][] boxes) {
         for (Coordinates possibleMove : possibleMoves) {
             if (possibleMove != null) {
-                boxes[(int) possibleMove.getX()][(int) possibleMove.getY()].setPossible(true);
+                boxes[possibleMove.getX()][possibleMove.getY()].setPossible(true);
             }
 
         }
@@ -186,14 +70,14 @@ public class Util {
     public void removePossibleMoves(List<Coordinates> possibleMoves, Spot[][] boxes) {
         for (Coordinates possibleMove : possibleMoves) {
             if (possibleMove != null) {
-                boxes[(int) possibleMove.getX()][(int) possibleMove.getY()].setPossible(false);
+                boxes[possibleMove.getX()][possibleMove.getY()].setPossible(false);
             }
         }
     }
 
     public ArrayList<Coordinates> checkIfHitPossible(int player) {
         ArrayList<Coordinates> coordinatesArrayList = new ArrayList<>();
-        isToKill= false;
+        isToKill = false;
         for (int i = 0; i < board.getBoxes().length; i++) {
             for (int j = 0; j < board.getBoxes()[i].length; j++) {
                 if (player == 1) {
@@ -217,8 +101,7 @@ public class Util {
                             coordinatesArrayList.add(checkDirection(SOUTH_EAST, player, i, j));
                             coordinatesArrayList.add(checkDirection(SOUTH_WEST, player, i, j));
                         }
-                    } catch (Exception e) {
-                        continue;
+                    } catch (Exception ignored) {
                     }
 
                 }
@@ -254,7 +137,7 @@ public class Util {
             }
         }
         switch (player) {
-            case 1 -> {
+            case WHITE -> {
                 if (!checkIfEmpty(boardX + directionalX, boardY + directionalY)) {
                     if (!isWhite(boardX + directionalX, boardY + directionalY)) {
                         if (checkIfEmpty(boardX + (directionalX * 2), boardY + (directionalY * 2))) {
@@ -266,7 +149,7 @@ public class Util {
                     }
                 }
             }
-            case 2 -> {
+            case BLACK -> {
                 if (!checkIfEmpty(boardX + directionalX, boardY + directionalY)) {
                     if (isWhite(boardX + directionalX, boardY + directionalY)) {
                         if (checkIfEmpty(boardX + (directionalX * 2), boardY + (directionalY * 2))) {
@@ -287,7 +170,7 @@ public class Util {
     public ArrayList<Coordinates> getPossibleMoveForSelectedPawn(int player, int selectedX, int selectedY) {
         ArrayList<Coordinates> coordinatesArrayList = new ArrayList<>();
         switch (player) {
-            case 1 -> {
+            case WHITE -> {
                 if (checkIfEmpty(selectedX - 1, selectedY - 1)) {
                     coordinatesArrayList.add(new Coordinates(selectedX - 1, selectedY - 1));
                 }
@@ -296,7 +179,7 @@ public class Util {
                     coordinatesArrayList.add(new Coordinates(selectedX - 1, selectedY + 1));
                 }
             }
-            case 2 -> {
+            case BLACK -> {
                 if (checkIfEmpty(selectedX + 1, selectedY + 1)) {
                     coordinatesArrayList.add(new Coordinates(selectedX + 1, selectedY + 1));
                 }
