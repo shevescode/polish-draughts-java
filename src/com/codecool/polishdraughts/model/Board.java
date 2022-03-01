@@ -57,6 +57,7 @@ public class Board {
         }
     }
 
+
     @Override
     public String toString() {
         return "Board{" + "boxes=" + Arrays.toString(boxes) + '}';
