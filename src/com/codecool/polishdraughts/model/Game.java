@@ -3,10 +3,7 @@ package com.codecool.polishdraughts.model;
 import com.codecool.polishdraughts.controller.ConsoleInput;
 import com.codecool.polishdraughts.view.ConsoleView;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 import static java.lang.System.exit;
 
@@ -16,7 +13,6 @@ public class Game {
     private final ConsoleView consoleView;
     private final ConsoleInput consoleInput;
     private final Util util;
-    private int player;
 
 
     public Game() {
@@ -47,7 +43,7 @@ public class Game {
         this.board = new Board();
         board.createBoard();
         util.setBoard(board);
-        player = 1;
+        int player = 1;
         while (gameIsRunning) {
             System.out.println("PLAYER: " + player);
             playRound(player);
