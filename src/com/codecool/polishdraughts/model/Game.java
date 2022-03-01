@@ -4,6 +4,7 @@ import com.codecool.polishdraughts.controller.ConsoleInput;
 import com.codecool.polishdraughts.view.ConsoleView;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -60,32 +61,38 @@ public class Game {
     public void playRound(int player) {
         consoleView.printBoard(board);
         util.setToKill(false);
-        Coordinates selectedPawn= util.checkIfHitPossible(player);
-        if(!util.isToKill()){
+        Coordinates selectedPawn;
+        Coordinates selectedSpot;
+        ArrayList<Coordinates> coordinatesArrayList;
+
+
+        coordinatesArrayList = util.checkIfHitPossible(player);
+
+        if (!util.isToKill()) {
             selectedPawn = ConsoleInput.getMove();
+            coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, selectedPawn.getX(), selectedPawn.getY());
+            util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+            consoleView.printBoard(board);
+            selectedSpot = ConsoleInput.getMove();
+            util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+            board.movePawn(selectedPawn, selectedSpot);
         }
 
-
-        List<Point> points = util.getPossibleMoves(player, selectedPawn);
-        util.setPossibleMoves(points, board.getBoxes());
-        consoleView.printBoard(board);
-
-        Coordinates selectedSpot = ConsoleInput.getMove();
         if (util.isToKill()) {
+            util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+            consoleView.printBoard(board);
+            selectedPawn = ConsoleInput.getMove();
+            consoleView.printBoard(board);
+            selectedSpot = ConsoleInput.getMove();
             util.findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
+            util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+            board.movePawn(selectedPawn, selectedSpot);
         }
-
-        util.removePossibleMoves(points, board.getBoxes());
-        board.movePawn(selectedPawn, selectedSpot);
-
 
         consoleView.printBoard(board);
 
 
     }
-
-
-
 
 
 }
