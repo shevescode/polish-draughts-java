@@ -4,14 +4,16 @@ import java.util.Arrays;
 
 public class Board {
     private final Spot[][] boxes;
-    public int boardSize;
+    public int boardSize = 10;
 
 
-    public Board(int n) {
-        this.boardSize = n;
+    public Board() {
         this.boxes = new Spot[boardSize][boardSize];
     }
 
+    public void setBoardSize(int boardSize) {
+        this.boardSize = boardSize;
+    }
 
     public int getBoardSize() {
         return boardSize;
@@ -38,16 +40,17 @@ public class Board {
 
         for (int i = 0; i < getBoardSize(); i++) {
             for (int j = 0; j < getBoardSize(); j++) {
-                if (i < 3 || i > getBoardSize() - 4) {
+                if (counter < 4 * getBoardSize() || counter >= getBoardSize() * getBoardSize() - 4 * getBoardSize()) {
                     if ((j % 2 == 0 && i % 2 == 0) || (j % 2 == 1 && i % 2 == 1)) {
-                        boxes[i][j] = new Spot(i, j, new Pawn(isWhite(i)), true);
-                        pawns-=1;
+                        boxes[i][j] = new Spot(i, j, new Pawn(isWhite(counter)), true);
+                        pawns -= 1;
                     } else {
                         boxes[i][j] = new Spot(i, j, false);
                     }
                 } else {
                     boxes[i][j] = new Spot(i, j, false);
                 }
+                counter += 1;
             }
 
         }
@@ -58,8 +61,9 @@ public class Board {
     public String toString() {
         return "Board{" + "boxes=" + Arrays.toString(boxes) + '}';
     }
-    public boolean isWhite(int row){
-        if (row > getBoardSize() - 4){
+
+    public boolean isWhite(int counter) {
+        if (counter < 4 * getBoardSize()) {
             return true;
         } else {
             return false;

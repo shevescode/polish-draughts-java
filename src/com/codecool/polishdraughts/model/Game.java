@@ -20,6 +20,7 @@ public class Game {
     public Game() {
         consoleView = new ConsoleView();
         util = new Util();
+        this.board = new Board();
     }
 
     public void beginGame() {
@@ -44,7 +45,8 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         int boardSize = Integer.parseInt(input);
-        this.board = new Board(boardSize);
+        board.setBoardSize(boardSize);
+//        this.board = new Board(boardSize);
 
         start();
 
