@@ -45,7 +45,7 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         int boardSize = Integer.parseInt(input);
-        board.setBoardSize(boardSize);
+        this.board.setBoardSize(boardSize);
 //        this.board = new Board(boardSize);
 
         start();
@@ -67,6 +67,7 @@ public class Game {
 
     public void start() {
         gameIsRunning = true;
+        board.createBoxes();
         board.createBoard();
         util.setBoard(board);
         player = 1;

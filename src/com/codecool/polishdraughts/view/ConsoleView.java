@@ -19,11 +19,15 @@ public class ConsoleView {
     }
 
     public void printBoard(Board board) {
-        System.out.println(board.getBoardSize());
         printBoardSigns();
         printLine();
         for (int i = board.getBoardSize(); i > 0; i--) {
-            System.out.print((i) + " | ");
+            if (i >= 10) {
+                System.out.print((i) + " | ");
+            } else {
+                System.out.print((i) + "  | ");
+            }
+
 
             for (int j = 0; j < board.getBoardSize(); j++) {
                 System.out.print(board.getBoxes()[abs(i - board.getBoardSize())][j]);

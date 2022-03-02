@@ -3,12 +3,12 @@ package com.codecool.polishdraughts.model;
 import java.util.Arrays;
 
 public class Board {
-    private final Spot[][] boxes;
+    private Spot[][] boxes;
     public int boardSize = 10;
 
 
     public Board() {
-        this.boxes = new Spot[boardSize][boardSize];
+
     }
 
     public void setBoardSize(int boardSize) {
@@ -19,6 +19,9 @@ public class Board {
         return boardSize;
     }
 
+    public void createBoxes() {
+        this.boxes = new Spot[boardSize][boardSize];
+    }
 
     public void movePawn(Coordinates selectedPawn, Coordinates selectedSpot) {
         Pawn pawn = boxes[selectedPawn.getX()][selectedPawn.getY()].getPawn();
@@ -35,15 +38,13 @@ public class Board {
 //    3 , 4 -> wszedzie null
 
     public void createBoard() {
-        int pawns = boardSize * 2;
         int counter = 0;
-
+        System.out.println(getBoardSize());
         for (int i = 0; i < getBoardSize(); i++) {
             for (int j = 0; j < getBoardSize(); j++) {
                 if (counter < 4 * getBoardSize() || counter >= getBoardSize() * getBoardSize() - 4 * getBoardSize()) {
                     if ((j % 2 == 0 && i % 2 == 0) || (j % 2 == 1 && i % 2 == 1)) {
                         boxes[i][j] = new Spot(i, j, new Pawn(isWhite(counter)), true);
-                        pawns -= 1;
                     } else {
                         boxes[i][j] = new Spot(i, j, false);
                     }
