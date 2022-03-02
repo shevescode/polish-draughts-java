@@ -3,9 +3,7 @@ package com.codecool.polishdraughts.model;
 import com.codecool.polishdraughts.controller.ConsoleInput;
 import com.codecool.polishdraughts.view.ConsoleView;
 
-import java.awt.*;
-import java.util.List;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 import static java.lang.System.exit;
 
@@ -13,21 +11,23 @@ public class Game {
     private boolean gameIsRunning;
     private Board board;
     private final ConsoleView consoleView;
+    private final ConsoleInput consoleInput;
     private final Util util;
-    private int player;
+    private Coordinates selectedPawn;
+    private Coordinates selectedSpot;
 
 
     public Game() {
         consoleView = new ConsoleView();
+        consoleInput = new ConsoleInput();
         util = new Util();
         this.board = new Board();
     }
 
     public void beginGame() {
         consoleView.printMenu();
-        Scanner scanner = new Scanner(System.in); //TODO move to console input
 
-        switch (scanner.nextInt()) {
+        switch (consoleInput.getScanner().nextInt()) {
             case 1 -> start();
 //            case 2 -> System.out.println("Options");
             case 2 -> selectSize();
@@ -53,26 +53,14 @@ public class Game {
     }
 
 
-    public void promptEnterKey() {
-        System.out.println("Hit \"ENTER\" to Start");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-        clearScreen();
-    }
-
-    public void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public void start() {
         gameIsRunning = true;
         board.createBoxes();
         board.createBoard();
         util.setBoard(board);
-        player = 1;
+        int player = 1;
         while (gameIsRunning) {
-            System.out.println("PLAYER: " + player);
+            consoleView.printMessage("PLAYER: " + player);
             playRound(player);
             if (!util.isToKill()) {
                 player = player == 1 ? 2 : 1;
@@ -82,28 +70,66 @@ public class Game {
 
 
     public void playRound(int player) {
-        consoleView.printBoard(board);
-        Coordinates selectedPawn = ConsoleInput.getMove();
-        List<Point> points = util.getPossibleMoves(player, selectedPawn);
-        util.setPossibleMoves(points, board.getBoxes());
-        consoleView.printBoard(board);
+        consoleView.printMessage("PLAYER " + player + " your turn!");
+        util.setToKill(false);
+        ArrayList<Coordinates> coordinatesArrayList;
+        ArrayList<Coordinates> validMoves;
 
-        Coordinates selectedSpot = ConsoleInput.getMove();
-        if (util.isToKill()) {
-            util.findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
+        coordinatesArrayList = util.checkIfHitPossible(player, false, -1, -1);
+        validMoves = util.getValidCoordinates();
+
+        if (!util.isToKill()) {
+            moveWhenKillImpossible(validMoves, player);
         }
 
-        util.removePossibleMoves(points, board.getBoxes());
-        board.movePawn(selectedPawn, selectedSpot);
-
-
+        if (util.isToKill()) {
+            moveWhenKillPossible(coordinatesArrayList, validMoves, player);
+        }
         consoleView.printBoard(board);
-
-
     }
 
+    public void moveWhenKillPossible(ArrayList<Coordinates> coordinatesArrayList, ArrayList<Coordinates> validMoves, int player) {
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Pawn to move! (for example A1):");
+            selectedPawn = ConsoleInput.getMove();
+        }
+        while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
+        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+        coordinatesArrayList = util.checkIfHitPossible(player, true, selectedPawn.getX(), selectedPawn.getY());
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Spot! (for example A1):");
+            selectedSpot = ConsoleInput.getMove();
+        }
+        while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
 
+        util.findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
+        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+        board.movePawn(selectedPawn, selectedSpot);
+    }
 
-
-
+    public void moveWhenKillImpossible(ArrayList<Coordinates> validMoves, int player) {
+        ArrayList<Coordinates> coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, false, -1, -1);
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Pawn to move! (for example A1):");
+            selectedPawn = ConsoleInput.getMove();
+        }
+        while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
+        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+        coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, true, selectedPawn.getX(), selectedPawn.getY());
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Spot! (for example A1):");
+            selectedSpot = ConsoleInput.getMove();
+        }
+        while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
+        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+        board.movePawn(selectedPawn, selectedSpot);
+    }
 }
