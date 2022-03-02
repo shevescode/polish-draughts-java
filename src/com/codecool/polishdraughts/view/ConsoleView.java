@@ -5,8 +5,10 @@ import com.codecool.polishdraughts.model.Board;
 import static java.lang.Math.abs;
 
 public class ConsoleView {
+    private Board board;
 
     public ConsoleView() {
+
     }
 
     public void printMenu() {
@@ -17,13 +19,14 @@ public class ConsoleView {
     }
 
     public void printBoard(Board board) {
+        System.out.println(board.getBoardSize());
         printBoardSigns();
         printLine();
-        for (int i = 8; i > 0; i--) {
+        for (int i = board.getBoardSize(); i > 0; i--) {
             System.out.print((i) + " | ");
 
-            for (int j = 0; j < 8; j++) {
-                System.out.print(board.getBoxes()[abs(i - 8)][j]);
+            for (int j = 0; j < board.getBoardSize(); j++) {
+                System.out.print(board.getBoxes()[abs(i - board.getBoardSize())][j]);
             }
             System.out.print("| " + (i));
             System.out.println();
