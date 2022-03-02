@@ -7,7 +7,7 @@ import java.util.Scanner;
 import static java.lang.Math.abs;
 
 public class ConsoleInput {
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public ConsoleInput(){
         this.scanner = new Scanner(System.in);
@@ -20,7 +20,6 @@ public class ConsoleInput {
 
     public static Coordinates getMove() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose coordinates (for example A1): ");
         String chosenCoordinates = scanner.next();
 
         if (validUserInput(chosenCoordinates)) {

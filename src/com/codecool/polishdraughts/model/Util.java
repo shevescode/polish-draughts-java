@@ -13,6 +13,7 @@ public class Util {
 
     private boolean isToKill;
     private Board board;
+    private ArrayList<Coordinates> validCoodrinates;
 
 
     public boolean isToKill() {
@@ -67,6 +68,7 @@ public class Util {
 
     }
 
+
     public void removePossibleMoves(List<Coordinates> possibleMoves, Spot[][] boxes) {
         for (Coordinates possibleMove : possibleMoves) {
             if (possibleMove != null) {
@@ -75,34 +77,41 @@ public class Util {
         }
     }
 
-    public ArrayList<Coordinates> checkIfHitPossible(int player) {
+    public ArrayList<Coordinates> checkIfHitPossible(int player, boolean userSelected, int x, int y) {
         ArrayList<Coordinates> coordinatesArrayList = new ArrayList<>();
+        validCoodrinates = new ArrayList<>();
         isToKill = false;
         for (int i = 0; i < board.getBoxes().length; i++) {
             for (int j = 0; j < board.getBoxes()[i].length; j++) {
-                if (player == 1) {
-                    try {
-                        if (board.getBoxes()[i][j].getPawn().getLook().equals("W ")) {
-                            coordinatesArrayList.add(checkDirection(NORTH_EAST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(NORTH_WEST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(SOUTH_EAST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(SOUTH_WEST, player, i, j));
+                if (player == WHITE) {
+                    if (!userSelected || (i == x && j == y)) {
+                        try {
+                            if (board.getBoxes()[i][j].getPawn().getLook().equals("W ")) {
+                                coordinatesArrayList.add(checkDirection(NORTH_EAST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(NORTH_WEST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(SOUTH_EAST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(SOUTH_WEST, player, i, j));
+                            }
+                        } catch (Exception e) {
+                            continue;
                         }
-                    } catch (Exception e) {
-                        continue;
                     }
 
+
                 }
-                if (player == 2) {
-                    try {
-                        if (board.getBoxes()[i][j].getPawn().getLook().equals("B ")) {
-                            coordinatesArrayList.add(checkDirection(NORTH_EAST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(NORTH_WEST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(SOUTH_EAST, player, i, j));
-                            coordinatesArrayList.add(checkDirection(SOUTH_WEST, player, i, j));
+                if (player == BLACK) {
+                    if (!userSelected || (i == x && j == y)) {
+                        try {
+                            if (board.getBoxes()[i][j].getPawn().getLook().equals("B ")) {
+                                coordinatesArrayList.add(checkDirection(NORTH_EAST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(NORTH_WEST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(SOUTH_EAST, player, i, j));
+                                coordinatesArrayList.add(checkDirection(SOUTH_WEST, player, i, j));
+                            }
+                        } catch (Exception ignored) {
                         }
-                    } catch (Exception ignored) {
                     }
+
 
                 }
             }
@@ -142,9 +151,8 @@ public class Util {
                     if (!isWhite(boardX + directionalX, boardY + directionalY)) {
                         if (checkIfEmpty(boardX + (directionalX * 2), boardY + (directionalY * 2))) {
                             isToKill = true;
+                            setValidCoordinates(boardX, boardY);
                             return new Coordinates(boardX + (directionalX * 2), boardY + (directionalY * 2));
-
-
                         }
                     }
                 }
@@ -154,6 +162,7 @@ public class Util {
                     if (isWhite(boardX + directionalX, boardY + directionalY)) {
                         if (checkIfEmpty(boardX + (directionalX * 2), boardY + (directionalY * 2))) {
                             isToKill = true;
+                            setValidCoordinates(boardX, boardY);
                             return new Coordinates(boardX + (directionalX * 2), boardY + (directionalY * 2));
 
 
@@ -167,31 +176,77 @@ public class Util {
 
     }
 
-    public ArrayList<Coordinates> getPossibleMoveForSelectedPawn(int player, int selectedX, int selectedY) {
+    public void setValidCoordinates(int x, int y) {
+        Coordinates coordinates = new Coordinates(x, y);
+        validCoodrinates.add(coordinates);
+    }
+
+    public ArrayList<Coordinates> getValidCoordinates() {
+        return validCoodrinates;
+    }
+
+    public ArrayList<Coordinates> getPossibleMoveForSelectedPawn(int player, boolean userSelected, int x, int y) {
         ArrayList<Coordinates> coordinatesArrayList = new ArrayList<>();
-        switch (player) {
-            case WHITE -> {
-                if (checkIfEmpty(selectedX - 1, selectedY - 1)) {
-                    coordinatesArrayList.add(new Coordinates(selectedX - 1, selectedY - 1));
+        for (int i = 0; i < board.getBoxes().length; i++) {
+            for (int j = 0; j < board.getBoxes()[i].length; j++) {
+                switch (player) {
+                    case WHITE -> {
+                        if (!userSelected || (i == x && j == y)) {
+                            try {
+                                if (board.getBoxes()[i][j].getPawn().getLook().equals("W ")) {
+                                    if (checkIfEmpty(i - 1, j - 1)) {
+                                        setValidCoordinates(i, j);
+                                        coordinatesArrayList.add(new Coordinates(i - 1, j - 1));
+                                    }
+
+                                    if (checkIfEmpty(i - 1, j + 1)) {
+                                        setValidCoordinates(i, j);
+                                        coordinatesArrayList.add(new Coordinates(i - 1, j + 1));
+                                    }
+                                }
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+
+
+                    }
+                    case BLACK -> {
+                        if (!userSelected || (i == x && j == y)) {
+                            try {
+                                if (board.getBoxes()[i][j].getPawn().getLook().equals("B ")) {
+                                    if (checkIfEmpty(i + 1, j + 1)) {
+                                        setValidCoordinates(i, j);
+                                        coordinatesArrayList.add(new Coordinates(i + 1, j + 1));
+                                    }
+
+
+                                    if (checkIfEmpty(i + 1, j - 1)) {
+                                        setValidCoordinates(i, j);
+                                        coordinatesArrayList.add(new Coordinates(i + 1, j - 1));
+                                    }
+                                }
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+
+                    }
                 }
 
-                if (checkIfEmpty(selectedX - 1, selectedY + 1)) {
-                    coordinatesArrayList.add(new Coordinates(selectedX - 1, selectedY + 1));
-                }
             }
-            case BLACK -> {
-                if (checkIfEmpty(selectedX + 1, selectedY + 1)) {
-                    coordinatesArrayList.add(new Coordinates(selectedX + 1, selectedY + 1));
-                }
-
-
-                if (checkIfEmpty(selectedX + 1, selectedY - 1)) {
-                    coordinatesArrayList.add(new Coordinates(selectedX + 1, selectedY - 1));
-                }
-            }
-
         }
         return coordinatesArrayList;
+    }
+
+    public boolean checkIfMoveIsValid(Coordinates selectedPawn, ArrayList<Coordinates> possibleSpots) {
+        for (Coordinates possibleSpot :
+                possibleSpots) {
+            if (selectedPawn.getX() == possibleSpot.getX() && selectedPawn.getY() == possibleSpot.getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
