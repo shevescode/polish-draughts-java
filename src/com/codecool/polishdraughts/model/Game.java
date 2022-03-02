@@ -20,6 +20,7 @@ public class Game {
     public Game() {
         consoleView = new ConsoleView();
         util = new Util();
+        this.board = new Board();
     }
 
     public void beginGame() {
@@ -28,7 +29,8 @@ public class Game {
 
         switch (scanner.nextInt()) {
             case 1 -> start();
-            case 2 -> System.out.println("Options");
+//            case 2 -> System.out.println("Options");
+            case 2 -> selectSize();
             case 3 -> System.out.println("Credits");
             case 4 -> {
                 System.out.println("Exit");
@@ -36,6 +38,18 @@ public class Game {
             }
             default -> beginGame();
         }
+    }
+
+    public void selectSize() {
+        System.out.println("Type in an integer between 10 & 20 to specify board size: ");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        int boardSize = Integer.parseInt(input);
+        this.board.setBoardSize(boardSize);
+//        this.board = new Board(boardSize);
+
+        start();
+
     }
 
 
@@ -53,7 +67,7 @@ public class Game {
 
     public void start() {
         gameIsRunning = true;
-        this.board = new Board();
+        board.createBoxes();
         board.createBoard();
         util.setBoard(board);
         player = 1;
