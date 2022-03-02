@@ -42,9 +42,8 @@ public class Game {
 
     public void selectSize() {
         System.out.println("Type in an integer between 10 & 20 to specify board size: ");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        int boardSize = Integer.parseInt(input);
+
+        int boardSize = consoleInput.getScanner().nextInt();
         this.board.setBoardSize(boardSize);
 //        this.board = new Board(boardSize);
 
