@@ -77,57 +77,39 @@ public class Game {
         coordinatesArrayList = util.checkIfHitPossible(player, false, -1, -1);
         validMoves = util.getValidCoordinates();
 
+        move(coordinatesArrayList, validMoves, player);
+        consoleView.printBoard(board);
+    }
+
+    public void move(ArrayList<Coordinates> coordinatesArrayList, ArrayList<Coordinates> validMoves, int player) {
         if (!util.isToKill()) {
-            moveWhenKillImpossible(validMoves, player);
+            coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, false, -1, -1);
         }
 
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Pawn to move! (for example A1):");
+            selectedPawn = ConsoleInput.getMove();
+        }
+        while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
+        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
+        if (!util.isToKill()) {
+            coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, true, selectedPawn.getX(), selectedPawn.getY());
+        } else {
+            coordinatesArrayList = util.checkIfHitPossible(player, true, selectedPawn.getX(), selectedPawn.getY());
+        }
+
+        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
+        consoleView.printBoard(board);
+        do {
+            consoleView.printMessage("Choose Spot! (for example A1):");
+            selectedSpot = ConsoleInput.getMove();
+        }
+        while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
         if (util.isToKill()) {
-            moveWhenKillPossible(coordinatesArrayList, validMoves, player);
+            util.findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
         }
-        consoleView.printBoard(board);
-    }
-
-    public void moveWhenKillPossible(ArrayList<Coordinates> coordinatesArrayList, ArrayList<Coordinates> validMoves, int player) {
-        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
-        consoleView.printBoard(board);
-        do {
-            consoleView.printMessage("Choose Pawn to move! (for example A1):");
-            selectedPawn = ConsoleInput.getMove();
-        }
-        while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
-        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
-        coordinatesArrayList = util.checkIfHitPossible(player, true, selectedPawn.getX(), selectedPawn.getY());
-        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
-        consoleView.printBoard(board);
-        do {
-            consoleView.printMessage("Choose Spot! (for example A1):");
-            selectedSpot = ConsoleInput.getMove();
-        }
-        while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
-
-        util.findPawnCoordinatesToRemove(selectedPawn, selectedSpot);
-        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
-        board.movePawn(selectedPawn, selectedSpot);
-    }
-
-    public void moveWhenKillImpossible(ArrayList<Coordinates> validMoves, int player) {
-        ArrayList<Coordinates> coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, false, -1, -1);
-        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
-        consoleView.printBoard(board);
-        do {
-            consoleView.printMessage("Choose Pawn to move! (for example A1):");
-            selectedPawn = ConsoleInput.getMove();
-        }
-        while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
-        util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
-        coordinatesArrayList = util.getPossibleMoveForSelectedPawn(player, true, selectedPawn.getX(), selectedPawn.getY());
-        util.setPossibleMoves(coordinatesArrayList, board.getBoxes());
-        consoleView.printBoard(board);
-        do {
-            consoleView.printMessage("Choose Spot! (for example A1):");
-            selectedSpot = ConsoleInput.getMove();
-        }
-        while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
         util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
         board.movePawn(selectedPawn, selectedSpot);
     }

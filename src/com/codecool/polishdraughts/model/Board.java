@@ -48,6 +48,8 @@ public class Board {
                     } else {
                         boxes[i][j] = new Spot(i, j, false);
                     }
+                } else if ((j % 2 == 0 && i % 2 == 0) || (j % 2 == 1 && i % 2 == 1)){
+                    boxes[i][j] = new Spot(i, j, true);
                 } else {
                     boxes[i][j] = new Spot(i, j, false);
                 }
@@ -64,11 +66,7 @@ public class Board {
     }
 
     public boolean isWhite(int counter) {
-        if (counter < 4 * getBoardSize()) {
-            return true;
-        } else {
-            return false;
-        }
+        return counter >= 4 * getBoardSize();
 
     }
 }

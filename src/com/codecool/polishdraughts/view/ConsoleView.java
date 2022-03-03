@@ -19,6 +19,7 @@ public class ConsoleView {
     }
 
     public void printBoard(Board board) {
+
         printBoardSigns();
         printLine();
         for (int i = board.getBoardSize(); i > 0; i--) {

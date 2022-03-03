@@ -1,5 +1,6 @@
 package com.codecool.polishdraughts.controller;
 
+import com.codecool.polishdraughts.model.Board;
 import com.codecool.polishdraughts.model.Coordinates;
 
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import static java.lang.Math.abs;
 
 public class ConsoleInput {
     private final Scanner scanner;
+    private static final Board board = new Board();
 
     public ConsoleInput(){
         this.scanner = new Scanner(System.in);
@@ -25,9 +27,9 @@ public class ConsoleInput {
         if (validUserInput(chosenCoordinates)) {
             int col = Character.getNumericValue(chosenCoordinates.charAt(0)) - 10;
             int row = Character.getNumericValue(chosenCoordinates.charAt(1));
-            System.out.println("row" + abs(row - 8) + " " + "col" + col);
+            System.out.println("row" + abs(row - board.getBoardSize()) + " " + "col" + col);
 
-            return new Coordinates(abs(row - 8), col);
+            return new Coordinates(abs(row - board.getBoardSize()), col);
 
         }
 
@@ -36,18 +38,24 @@ public class ConsoleInput {
 
     private static boolean validUserInput(String chosenCoordinates) {
 
-        if (chosenCoordinates.length() == 2) {
-            char isCharValid = chosenCoordinates.charAt(0);
-            char isDigitValid = chosenCoordinates.charAt(1);
+        switch (chosenCoordinates.length()) {
+            case 2:
+                char isCharValid = chosenCoordinates.charAt(0);
+                char isDigitValid = chosenCoordinates.charAt(1);
 
-            if (Character.toString(isCharValid).matches("^[a-hA-H]*$")) {
-                return Character.toString(isDigitValid).matches("^[1-8]*$");
-            }
-            return false;
+                if (Character.toString(isCharValid).matches("^[a-uA-U]*$")) {
+                    return Character.toString(isDigitValid).matches("^[1-9]*$");
+                }
+                return false;
+            case 3:
+
+            default:
+                System.out.println("Something wrong, try again...");
+                return false;
 
         }
-        System.out.println("Wrong pawn coordinates, try again...");
-        return false;
+
+
     }
 
 }
