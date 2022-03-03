@@ -29,7 +29,6 @@ public class Game {
 
         switch (consoleInput.getScanner().nextInt()) {
             case 1 -> start();
-//            case 2 -> System.out.println("Options");
             case 2 -> selectSize();
             case 3 -> System.out.println("Credits");
             case 4 -> {
@@ -45,7 +44,6 @@ public class Game {
 
         int boardSize = consoleInput.getScanner().nextInt();
         this.board.setBoardSize(boardSize);
-//        this.board = new Board(boardSize);
 
         start();
 
@@ -90,7 +88,7 @@ public class Game {
         consoleView.printBoard(board);
         do {
             consoleView.printMessage("Choose Pawn to move! (for example A1):");
-            selectedPawn = ConsoleInput.getMove();
+            selectedPawn = ConsoleInput.getMove(board);
         }
         while (!util.checkIfMoveIsValid(selectedPawn, validMoves));
         util.removePossibleMoves(coordinatesArrayList, board.getBoxes());
@@ -104,7 +102,7 @@ public class Game {
         consoleView.printBoard(board);
         do {
             consoleView.printMessage("Choose Spot! (for example A1):");
-            selectedSpot = ConsoleInput.getMove();
+            selectedSpot = ConsoleInput.getMove(board);
         }
         while (!board.getBoxes()[selectedSpot.getX()][selectedSpot.getY()].isActive());
         if (util.isToKill()) {
