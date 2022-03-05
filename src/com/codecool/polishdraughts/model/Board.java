@@ -26,6 +26,7 @@ public class Board {
     public void movePawn(Coordinates selectedPawn, Coordinates selectedSpot) {
         Pawn pawn = boxes[selectedPawn.getX()][selectedPawn.getY()].getPawn();
         boxes[selectedPawn.getX()][selectedPawn.getY()].setPawn(null);
+        System.out.println(selectedSpot.getX());
         boxes[selectedSpot.getX()][selectedSpot.getY()].setPawn(pawn);
     }
 
@@ -39,7 +40,7 @@ public class Board {
 
     public void createBoard() {
         int counter = 0;
-        System.out.println(getBoardSize());
+        
         for (int i = 0; i < getBoardSize(); i++) {
             for (int j = 0; j < getBoardSize(); j++) {
                 if (counter < 4 * getBoardSize() || counter >= getBoardSize() * getBoardSize() - 4 * getBoardSize()) {
