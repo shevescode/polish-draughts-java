@@ -33,10 +33,10 @@ public class ConsoleInput {
                 }
                 case 3 -> {
                     int rowSecondDigit = Character.getNumericValue(chosenCoordinates.charAt(2));
-                    String x = String.valueOf(rowFirstDigit) + String.valueOf(rowSecondDigit);
-                    int y = Integer.parseInt(x);
-                    return new Coordinates(abs(y - board.getBoardSize()), col);
-                }
+                    String addedDigits = String.valueOf(rowFirstDigit) + String.valueOf(rowSecondDigit);
+                    int row = Integer.parseInt(addedDigits);
+                    return new Coordinates(abs(row - board.getBoardSize()), col);
+                }   
             }
         }
         return new Coordinates(0, 0);
@@ -55,10 +55,10 @@ public class ConsoleInput {
             }
             case 3 -> {
                 char isSecondDigitValid = chosenCoordinates.charAt(2);
-                String x = String.valueOf(isFirstDigitValid) + String.valueOf(isSecondDigitValid);
-                int y = Integer.parseInt(x);
+                String addedDigits = String.valueOf(isFirstDigitValid) + String.valueOf(isSecondDigitValid);
+                int row = Integer.parseInt(addedDigits);
                 if (Character.toString(isCharValid).matches("^[a-uA-U]*$")) {
-                    return y > 0 && y <= board.getBoardSize();
+                    return row > 0 && row <= board.getBoardSize();
 
                 }
                 return false;
